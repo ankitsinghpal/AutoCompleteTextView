@@ -1,0 +1,89 @@
+package perfect.mr.transportation.admin;
+
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import perfect.mr.transportation.R;
+
+public class AdminUserFeedbackRetrieve extends AppCompatActivity {
+    TextInputLayout t_user_username,t_user_password;
+    String username,password;
+    Button login;
+
+    String db_username,db_password,db_firstName,db_lastName,db_phoneNumber,db_city,db_pincode,db_state,db_address_house_no,
+            db_address_locality,db_address_colony;
+
+    String json_string;
+    String JSON_STRING;
+
+    private ProgressDialog mLoginProgress;
+
+    AdminGSAdapter adminGSAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_login);
+
+
+        mLoginProgress = new ProgressDialog(this);
+
+        t_user_username=(TextInputLayout)findViewById(R.id.et_login_username);
+        t_user_password=(TextInputLayout) findViewById(R.id.et_login_password);
+
+
+
+        login=(Button)findViewById(R.id.button_u_login);
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                username=t_user_username.getEditText().getText().toString().trim();
+                password=t_user_password.getEditText().getText().toString().trim();
+                if(TextUtils.isEmpty(username) || TextUtils.isEmpty(password)){
+                    Toast.makeText(AdminUserFeedbackRetrieve.this, "Please Fill all blocks", Toast.LENGTH_SHORT).show();
+                    return ;
+                }
+
+                Toast.makeText(AdminUserFeedbackRetrieve.this, "Login Details\n"+username+"\n"+password, Toast.LENGTH_SHORT).show();
+
+                mLoginProgress.setTitle("Logging In");
+                mLoginProgress.setMessage("Please wait while we check your credentials.");
+                mLoginProgress.setCanceledOnTouchOutside(false);
+                mLoginProgress.show();
+
+
+                CheckLoginData();
+
+            }
+        });
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        new AdminUserFeedbackRetrieve.BackgroundTask().execute();
+  

@@ -1,0 +1,57 @@
+package perfect.mr.transportation.admin;
+
+import  android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.widget.ListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+import perfect.mr.transportation.R;
+
+public class DisplayViewUR extends AppCompatActivity {
+
+    String JSON_STRING;
+    JSONObject jsonObject;
+    JSONArray jsonArray;
+    AdminGSAdapter adminGSAdapter;
+    //RecyclerView recyclerView;
+    ListView listView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_display_view_ur);
+
+        listView= (ListView)findViewById(R.id.listview);
+        listView.setAdapter(adminGSAdapter);
+
+        //JSON_STRING= getIntent().getExtras().getString("json_data");
+
+        JSON_STRING="https://unturbid-contrast.000webhostapp.com/getuser_form.php";
+        String  id,complain_no,fname,lname,location_pin,city,state,pincode,
+                contact_no,detail_view,photo;
+
+        try {
+            jsonObject=new JSONObject(JSON_STRING);
+            int count=0;
+            jsonArray=jsonObject.getJSONArray("server_response");
+            while (count<jsonArray.length()){
+
+                JSONObject JO= jsonArray.getJSONObject(count);
+                id= JO.getString("user_id");
+                complain_no= JO.getString("user_complain_no");
+                fname= JO.getString("user_first_name");
+                lname= JO.getString("user_last_name");
+                location_pin= JO.getString("user_location_pin");
+                city= JO.getString("user_city");
+                state= JO.getString("user_state");
+                pincode= JO.getString("user_pincode");
+                contact_no= JO.getString("user_contact_no");
+                detail_view= JO.getString("user_detail_vi
